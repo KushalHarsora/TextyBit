@@ -1,6 +1,7 @@
 "use client";
 
 import Particles from "@/components/magicui/particles";
+import TypingAnimation from "@/components/magicui/typing-animation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -39,17 +40,16 @@ export default function Home() {
 
       {/* Main Section */}
 
-      <section className=" h-fit w-full absolute top-[7.5vh] left-0 z-10 bg-transparent overflow-hidden p-2 mt-16">
-        <h1 className=" text-white text-center text-8xl max-lg:text-6xl font-medium">
-          TextyBit
-        </h1>
+      <section className=" h-[50vh] w-full flex flex-col justify-center items-center gap-4 absolute top-[7.5vh] left-0 z-10 bg-transparent overflow-hidden p-2">
+        <TypingAnimation text="TextyBit" duration={150} className=" text-[#E67E22] text-8xl max-lg:text-5xl font-semibold font-sans" />
+        <TypingAnimation text="Chat with your documnets in a eligent way with just the power of your fingers" duration={20} className=" text-white text-2xl max-lg:text-xl font-medium" />
       </section>
 
       <Particles
         className=" bg-black absolute top-0 left-0 z-0 h-[300vh] w-full overflow-hidden"
         quantity={250}
         ease={80}
-        color={"#fff"}
+        color={"#ffffff"}
         refresh
       />
     </main>
