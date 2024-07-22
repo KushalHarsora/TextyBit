@@ -127,7 +127,7 @@ const Register = () => {
                         )}
                     />
                     <Button type='submit' variant={'default'} className=' w-full h-fit'>
-                        Sign in
+                        Sign up
                     </Button>
                 </form>
             </Form>

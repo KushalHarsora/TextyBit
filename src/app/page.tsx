@@ -18,7 +18,7 @@ const App = () => {
       
       <section className=' fixed top-0 left-0 h-[9vh] w-screen flex flex-row justify-center items-center overflow-hidden bg-transparent backdrop-blur-md z-20 border-b-[0.25px] border-gray-100'>
         <div className=' h-fit w-[20vw] overflow-hidden flex justify-center items-center'>
-          <Image src={'logo.svg'} alt='logo' width={120} height={120}/>
+          <Image src={'logo.svg'} alt='logo' width={120} height={120} priority/>
         </div>
         <div className=' h-full w-[50vw] flex flex-row justify-center items-center'>
           <Button variant={'link'}>Pricing</Button>
