@@ -1,107 +1,106 @@
 "use client";
 
-import { Button } from '@/components/ui/button'
-import { Sidebar, SidebarBody, SidebarLink } from '@/components/ui/sidebar';
-import { IconArrowLeft, IconBrandTabler, IconSettings, IconUserBolt } from '@tabler/icons-react';
-import axios from 'axios';
+import React from 'react';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { LayoutDashboard, ReceiptIndianRupee, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuGroup, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
+import axios from 'axios';
 import { toast } from 'sonner';
 
-const Home = ({ params }: { params: { id: string }}) => {
+const Home = ({ params }: { params: { id: string } }) => {
 
-    const router = useRouter();
+  const router = useRouter();
 
-    const [open, setOpen] = useState<boolean>(false);
-
-    const links = [
-        {
-          label: "Dashboard",
-          href: "#",
-          icon: (
-            <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-          ),
-        },
-        {
-          label: "Profile",
-          href: "#",
-          icon: (
-            <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-          ),
-        },
-        {
-          label: "Settings",
-          href: "#",
-          icon: (
-            <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-          ),
-        },
-        {
-          label: "Logout",
-          href: "#",
-          icon: (
-            <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-          ),
-        },
-      ];
-
-    const handlelogout = async () => {
-        try {
-            await axios.get("/auth/logout")
-                .then((res) => {
-                    toast.success(res.data.message || "Logout Successful!", {
-                        style: {
-                            "backgroundColor": "#D5F5E3",
-                            "color": "black",
-                            "border": "none"
-                        },
-                        duration: 1500
-                    });
-                    router.push("/login");
-                })
-                .catch((error: any) => {
-                    console.log(error);
-                })
-        } catch (error: any) {
-            console.log(error);
-        }
-    };
+  // logout
+  const handlelogout = async () => {
+    try {
+      await axios.get("/auth/logout")
+        .then((res) => {
+          toast.success(res.data.message || "Logout Successful!", {
+            style: {
+              "backgroundColor": "#D5F5E3",
+              "color": "black",
+              "border": "none"
+            },
+            duration: 1500
+          });
+          router.push("/login");
+        })
+        .catch((error: any) => {
+          console.log(error);
+        })
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   return (
-    <main className=' h-screen w-screen flex flex-col justify-center items-center gap-12 text-4xl'>
-        <section className=' absolute left-0 top-0 h-screen w-fit cursor-pointer'>
-        <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className=" justify-between gap-10 bg-transparent backdrop-blur-md border-b-[1px] border-gray-100">
-          <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-            <div className=' flex flex-col justify-center items-center'>
-            {open ? <Image src={'/logo.svg'} alt='logo' width={120} height={100} priority/> : <></>}
-            </div>
-            <div className="mt-8 flex flex-col gap-2">
-              {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
-              ))}
-            </div>
-          </div>
-          <div>
-            <SidebarLink
-              link={{
-                label: "Manu Arora",
-                href: "#",
-                icon: (
-                  <Image
-                    src={"logo.svg"}
-                    priority
-                    width={50}
-                    height={50}
-                    alt="Avatar"
-                  />
-                ),
-              }}
-            />
-          </div>
-        </SidebarBody>
-      </Sidebar>
+    <main className=' h-screen w-screen flex flex-row justify-center items-center text-4xl'>
+      <section className=' fixed top-0 left-0 h-[9vh] w-screen flex flex-row justify-center items-center overflow-hidden bg-transparent backdrop-blur-md z-20 border-b-[0.25px] border-gray-100'>
+        <div className=' h-fit w-1/2 overflow-hidden flex justify-center items-center'>
+          <Image src={"/logo.svg"} alt='logo' width={120} height={120} priority />
+        </div>
+        <div className=' h-full w-1/2 flex flex-row justify-center items-center gap-4'>
+          <Button variant={'link'} className=' max-lg:hidden' onClick={() => router.push(`/dashboard/${params.id}`)}>
+            Dashboard
+          </Button>
+          <span className=' cursor-pointer'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" alt='user icon' />
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className=' w-40'>
+              <DropdownMenuLabel className=' text-center font-bold'>{params.id != undefined && params.id?.length < 8 ? params.id?.charAt(0).toUpperCase() + params.id?.slice(1).toLowerCase() : "Profile"}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem className=' cursor-pointer lg:hidden' onClick={() => router.push(`/dashboard/${params.id}`)}>
+                  <div className=' flex flex-row justify-between items-center gap-2'>
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem className=' cursor-pointer' onClick={() => router.push(`/billing/${params.id}`)}>
+                  <div className=' flex flex-row justify-between items-center gap-2'>
+                    <User />
+                    <span>Profile</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem className=' cursor-pointer' onClick={() => router.push(`/billing/${params.id}`)}>
+                  <div className=' flex flex-row justify-between items-center gap-2'>
+                    <ReceiptIndianRupee />
+                    <span>Billing</span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup className=' px-2 py-1 flex items-center justify-center'>
+                <Button className=' w-full h-fit' onClick={handlelogout}>Logout</Button>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          </span>
+        </div>
+      </section>
+      <section className=' absolute top-[9vh] left-0 h-[91vh] w-screen flex flex-row justify-center items-center'>
+        <div className=' w-3/5 h-full bg-slate-100'>
+
+        </div>
+        <div className=' w-2/5 h-full bg-slate-300'>
+
+        </div>
       </section>
     </main>
   )
