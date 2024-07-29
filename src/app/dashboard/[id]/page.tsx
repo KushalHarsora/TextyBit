@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, ReceiptIndianRupee, User } from 'lucide-react';
+import { Cloud, LayoutDashboard, ReceiptIndianRupee, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
     DropdownMenu,
@@ -17,6 +17,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import axios from 'axios';
 import { toast } from 'sonner';
+import Dropzone from "react-dropzone";
+import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 const Dashboard = ({ params }: { params: { id: string } }) => {
 
@@ -45,6 +49,35 @@ const Dashboard = ({ params }: { params: { id: string } }) => {
         }
     };
 
+    const UploadDropZone = () => {
+        return(
+            <Dropzone multiple={false} onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+                {({ getRootProps, getInputProps, acceptedFiles}) => (
+                    <div
+                        {...getRootProps()}
+                        className=' border-[2px] h-48 p-1 border-dotted border-gray-300 rounded-lg'
+                    >
+                        <div className=' h-full w-full flex justify-center items-center'>
+                            <label
+                                htmlFor='dropzone-file'
+                                className=' h-full w-full flex flex-col justify-center items-center rounded-xl bg-gray-100 cursor-pointer'    
+                            >
+                                <div className=' flex flex-col justify-center items-center pt-5 pb-6'>
+                                    <Cloud className=' h-6 w-6 text-zinc-500 mb-2' />
+                                    <p className=' mb-1 text-sm text-zinc-700'>
+                                        <span className=' font-semibold'>Click to Upload</span>
+                                        {' '}
+                                        or drag and drop
+                                    </p>
+                                    <p className=' text-xs text-zinc-500'>PDF (upto <span className=' font-semibold'>4MB</span>)</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                )}
+            </Dropzone>
+        )
+    }
 
     return (
         <main className=' h-screen w-screen'>
@@ -93,6 +126,29 @@ const Dashboard = ({ params }: { params: { id: string } }) => {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </span>
+                </div>
+            </section>
+            <section className=' h-[91vh] w-screen absolute top-[9vh] left-0 flex flex-col justify-evenly items-center'>
+                <div className=' h-[15vh] w-screen flex flex-row justify-around items-center'>
+                    <p className=' text-5xl max-lg:text-2xl font-bold'>My Files</p>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant={'default'} className=' font-medium'>Upload</Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Upload File</DialogTitle>
+                                <DialogDescription>drag and drop your pdf files here.</DialogDescription>
+                            </DialogHeader>
+                            <div className=' h-48 w-full'>
+                                <UploadDropZone />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </div>
+                <Separator orientation={'horizontal'} className=' h-[1px] w-screen' />
+                <div className=' h-[76vh] w-screen bg-green-100'>
+
                 </div>
             </section>
         </main>
