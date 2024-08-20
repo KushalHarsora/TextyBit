@@ -4,8 +4,6 @@ import { ArrowRight } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import Image from 'next/image'
 import HyperText from '@/components/magicui/hyper-text'
-import { TextGenerateEffect } from '@/components/ui/text-generate-effect'
-import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation'
 
 export default function Home() {
 
@@ -29,7 +27,7 @@ export default function Home() {
           in seconds.
         </h1>
         <div className='mt-5 max-w-prose text-zinc-700 sm:text-lg'>
-          <TextGenerateEffect words={words} />
+          <p className=' bg-green-50 sm:text-lg'>{words}</p>
         </div>
 
         <Link

@@ -12,8 +12,9 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
 
   const pathname = usePathname()
 
+  // Close the menu when the pathname changes
   useEffect(() => {
-    if (isOpen) toggleOpen()
+    if (isOpen) setOpen(false)
   }, [pathname])
 
   const closeOnCurrent = (href: string) => {
