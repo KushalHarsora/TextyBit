@@ -27,7 +27,7 @@ export default function Home() {
           in seconds.
         </h1>
         <div className='mt-5 max-w-prose text-zinc-700 sm:text-lg'>
-          <p className=' bg-green-50 sm:text-lg'>{words}</p>
+          <p className=' bg-green-50 sm:text-lg rounded-lg p-1'>{words}</p>
         </div>
 
         <Link
