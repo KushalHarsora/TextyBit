@@ -1,9 +1,9 @@
 'use client';
 
 import React from "react";
-import Particles from '@/app/components/ui/particles';
+import Particles from '@/components/ui/particles';
 import { toast } from "sonner";
-import { Button } from "@/app/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -11,8 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/components/ui/form"
-import { Input } from "@/app/components/ui/input"
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -56,8 +56,7 @@ const Home = () => {
           },
           duration: 1500
         });
-        const username = data.name.replace(/\s+/g, '').toLowerCase().trim();
-        router.push(`/dashboard/${username}`);
+        router.push(`/dashboard`);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

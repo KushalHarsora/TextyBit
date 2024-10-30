@@ -1,4 +1,4 @@
-import prisma from '@/app/db/client';
+import prisma from '@/db/client';
 import bcryptjs from 'bcryptjs';
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
                 }
                 // Create Token
                 const token = jwt.sign(tokenData, process.env.JWT_SECRET_KEY!, { expiresIn: "1d" });
-                const response = NextResponse.json({ message: "Sign-in Successful", name: user.username }, { status: 200 });
+                const response = NextResponse.json({ message: "Sign-in Successful" }, { status: 200 });
                 // Set Cookies
                 response.cookies.set("token", token, {
                     httpOnly: true,
