@@ -1,22 +1,21 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import React from "react";
-import Particles from '@/components/ui/particles';
+import { toast } from "sonner";
 
 const Home = () => {
 
-  const color = "#000000";
+  const handleToast = () => {
+    toast.success("Sonner added", {
+      duration: 1200,
+    });
+  }
 
   return(
     <React.Fragment>
       <main className=" h-screen w-screen flex justify-center items-center">
-      <Particles
-        className="absolute inset-0"
-        quantity={100}
-        ease={80}
-        color={color}
-        refresh
-      />
-        <Button variant={'link'} className=" text-3xl">
+        <Button variant={'link'} className=" text-3xl" onClick={handleToast}>
           Texty Bit
         </Button>
       </main>
