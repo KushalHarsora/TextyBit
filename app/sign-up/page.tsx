@@ -1,9 +1,9 @@
 'use client';
 
 import React from "react";
-import Particles from '@/components/ui/particles';
+import Particles from '@/app/components/ui/particles';
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/app/components/ui/button"
 import {
     Form,
     FormControl,
@@ -11,12 +11,13 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/app/components/ui/form"
+import { Input } from "@/app/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useRouter } from "next/navigation";
+import axios, { AxiosResponse } from 'axios';
 
 const registerSchema = z.object({
     username: z.string().min(2, {
@@ -41,12 +42,37 @@ const Home = () => {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof registerSchema>) => {
-        console.log(values);
-        toast.success("Login Success", {
-            duration: 1500,
-        });
-        router.push('/sign-in');
+    const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+        try {
+            const response: AxiosResponse = await axios.post("/auth/sign-up", { values }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = response.data;
+            if (response.status === 201) {
+                toast.success(data.message || "Sign-up successful!", {
+                    duration: 1500
+                });
+                router.push("/sign-in");
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                const { status, data } = error.response;
+                console.log(status);
+                if (status === 409) {
+                    toast.error(data.error || "User Already exists", {
+                        duration: 2500
+                    })
+                    router.push("/sign-in");
+                }
+            } else {
+                toast.error("An unexpected error occurred. Please try again.", {
+                    duration: 2500
+                });
+            }
+        }
     }
 
     return (

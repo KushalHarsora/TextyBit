@@ -1,9 +1,9 @@
 'use client';
 
 import React from "react";
-import Particles from '@/components/ui/particles';
+import Particles from '@/app/components/ui/particles';
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/app/components/ui/button"
 import {
   Form,
   FormControl,
@@ -11,12 +11,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/app/components/ui/form"
+import { Input } from "@/app/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useRouter } from "next/navigation";
+import axios, { AxiosResponse } from "axios";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -37,11 +38,69 @@ const Home = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
-    toast.success("Login Success", {
-      duration: 1500,
-    });
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    try {
+      const response: AxiosResponse = await axios.post('/auth/sign-in', { values }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = response.data;
+
+      if (response.status === 200) {
+        toast.success(data.message || "Sign-in successful!", {
+          style: {
+            "backgroundColor": "#D5F5E3",
+            "color": "black",
+            "border": "none"
+          },
+          duration: 1500
+        });
+        const username = data.name.replace(/\s+/g, '').toLowerCase().trim();
+        router.push(`/dashboard/${username}`);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const { status, data } = error.response;
+        console.log(status);
+        if (status === 401) {
+          toast.error(data.error || "User does not Exists", {
+            style: {
+              "backgroundColor": "#FADBD8",
+              "color": "black",
+              "border": "none"
+            },
+            duration: 2500
+          })
+          router.push("/sign-up");
+        } else if (status === 409) {
+          toast.error(data.error || "Invalid Credentials", {
+            style: {
+              "backgroundColor": "#FADBD8",
+              "color": "black",
+              "border": "none"
+            },
+            duration: 2500
+          });
+          form.resetField('password');
+        } else {
+          toast.error(data.error || "Some Error Occured", {
+            style: {
+              "backgroundColor": "#FADBD8",
+              "color": "black",
+              "border": "none"
+            },
+            duration: 2500
+          });
+          form.reset();
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again.", {
+          invert: false,
+          duration: 2500
+        });
+      }
+    }
   }
 
   return (
@@ -92,11 +151,11 @@ const Home = () => {
             </form>
           </Form>
           <div className=" w-full flex justify-center items-center gap-4 text-lg">
-            Don&apos;t have an account? 
-            <Button 
-              className=" text-lg underline decoration-wavy decoration-slate-500" 
+            Don&apos;t have an account?
+            <Button
+              className=" text-lg underline decoration-wavy decoration-slate-500"
               variant={'ghost'}
-              onClick={() => {router.push('/sign-up')}} 
+              onClick={() => { router.push('/sign-up') }}
             >
               sign-up
             </Button>
