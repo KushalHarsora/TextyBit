@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Navbar from "@/components/custom/navbar";
@@ -16,7 +17,7 @@ const Dashboard = () => {
         username: "",
         email: ""
     });
-
+    
     const [file, setFile] = useState();
 
     useEffect(() => {
