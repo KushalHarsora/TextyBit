@@ -24,7 +24,7 @@ const loginSchema = z.object({
   password: z.string().min(8, {
     message: "Password Required",
   })
-})
+});
 
 const Home = () => {
 
