@@ -58,10 +58,10 @@ const Dashboard = () => {
     };
     return (
         <React.Fragment>
-            <main className=" h-screen w-screen flex flex-col justify-center items-center overflow-y-scroll z-0">
+            <main className=" h-screen w-screen flex flex-col justify-center items-center z-0">
                 <Navbar />
-                <div className=" top-[7vh] left-0 absolute h-[93vh] w-screen flex flex-row justify-center items-center">
-                    <section className=" h-[93vh] w-3/5 bg-white flex justify-center items-center overflow-hidden">
+                <div className=" top-[10vh] left-0 absolute h-[90vh] w-screen flex flex-row justify-center items-center">
+                    <section className=" h-[90vh] w-3/5 bg-white flex justify-center items-center overflow-hidden">
                         {
                             (!file)
                                 ?
@@ -74,7 +74,7 @@ const Dashboard = () => {
                                 </div>
                         }
                     </section>
-                    <section className=" h-[93vh] w-2/5 bg-slate-100">
+                    <section className=" h-[90vh] w-2/5 bg-slate-100">
                         {
                             (details.username == "" && details.email == "")
                                 ?
