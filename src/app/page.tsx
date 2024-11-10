@@ -52,7 +52,7 @@ const Home: React.FC = () => {
               <HyperText text="TextyBit" />
             </h1>
             <p className=" w-full text-wrap text-xl text-center">
-              Unlock the Power of PDFs – Chat, Search, and Explore with Ease!
+              Unlock the Power of PDFs - Chat, Search, and Explore with Ease!
             </p>
             <Button
               className=" rounded-lg mt-6"

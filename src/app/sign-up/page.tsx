@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { BackgroundLines } from '@/components/ui/background-lines';
 import { useRouter } from 'next/navigation';
+import axios, { AxiosResponse } from 'axios';
+import { toast } from 'sonner';
 
 const registerSchema = z.object({
     username: z.string().min(2, {
@@ -40,9 +42,38 @@ const Register: React.FC = () => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof registerSchema>) {
-        console.log(values)
-    }
+    const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+        try {
+            const response: AxiosResponse = await axios.post("/auth/sign-up", { values }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = response.data;
+            if (response.status === 201) {
+                toast.success(data.message || "Registration successful!", {
+                    duration: 1500
+                });
+                router.push("/sign-in");
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                const { status, data } = error.response;
+                console.log(status);
+                if (status === 409) {
+                    toast.error(data.error || "User Already exists", {
+                        duration: 2500
+                    })
+                    router.push("/sign-in");
+                }
+            } else {
+                toast.error("An unexpected error occurred. Please try again.", {
+                    duration: 2500
+                });
+            }
+        }
+    };
 
     return (
         <React.Fragment>

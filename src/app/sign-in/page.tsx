@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { BackgroundLines } from '@/components/ui/background-lines';
 import { useRouter } from 'next/navigation';
+import axios, { AxiosResponse } from 'axios'
+import { toast } from 'sonner';
 
 const loginSchema = z.object({
     email: z.string().email(),
@@ -36,9 +38,70 @@ const Login: React.FC = () => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof loginSchema>) {
-        console.log(values)
-    }
+    const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+        try {
+            const response: AxiosResponse = await axios.post('/auth/sign-in', { values },  {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = response.data;
+            
+            if (response.status === 200) {
+                toast.success(data.message || "Login successful!", {
+                    style: {
+                        "backgroundColor": "#D5F5E3",
+                        "color": "black",
+                        "border": "none"
+                    },
+                    duration: 1500
+                });
+
+                router.push('/dashboard');
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                const { status, data } = error.response;
+                console.log(status);
+                if (status === 401) {
+                    toast.error(data.error || "User does not Exists", {
+                        style: {
+                            "backgroundColor": "#FADBD8",
+                            "color": "black",
+                            "border": "none"
+                        },
+                        duration: 2500
+                    })
+                    router.push("/sign-up");
+                } else if (status === 409) {
+                    toast.error(data.error || "Invalid Credentials", {
+                        style: {
+                            "backgroundColor": "#FADBD8",
+                            "color": "black",
+                            "border": "none"
+                        },
+                        duration: 2500
+                    });
+                    form.resetField('password');
+                } else {
+                    toast.error(data.error || "Some Error Occured", {
+                        style: {
+                            "backgroundColor": "#FADBD8",
+                            "color": "black",
+                            "border": "none"
+                        },
+                        duration: 2500
+                    });
+                    form.reset();
+                }
+            } else {
+                toast.error("An unexpected error occurred. Please try again.", {
+                    invert: false,
+                    duration: 2500
+                });
+            }
+        }
+    };
 
     return (
         <React.Fragment>
