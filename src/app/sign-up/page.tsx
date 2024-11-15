@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { BackgroundLines } from '@/components/ui/background-lines';
-import { useRouter } from 'next/navigation';
-import axios, { AxiosResponse } from 'axios';
-import { toast } from 'sonner';
+import { useRouter } from 'next/navigation'
+import axios, { AxiosResponse } from 'axios'
+import { toast } from 'sonner'
 
 const registerSchema = z.object({
     username: z.string().min(2, {
