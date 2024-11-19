@@ -1,9 +1,7 @@
-"use client";
-
+import React from 'react';
+import ChatSection from '@/components/custom/chatSection';
 import FileUpload from '@/components/custom/fileUpload';
 import Navbar from '@/components/custom/navbar';
-import React from 'react';
-
 
 const Dashboard = () => {
 
@@ -12,6 +10,7 @@ const Dashboard = () => {
         <main className=' h-screen w-screen flex flex-col justify-center items-center gap-4'>
             <Navbar />
             <FileUpload />
+            <ChatSection />
         </main>
     </React.Fragment>
   )

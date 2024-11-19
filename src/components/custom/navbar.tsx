@@ -59,7 +59,7 @@ const Navbar = () => {
   return (
     <React.Fragment>
       <section className=' fixed top-0 left-0 h-[10vh] w-full flex justify-center items-center'>
-        <div className=' h-[8vh] w-1/2 rounded-xl flex justify-around items-center border drop-shadow-xl z-10'>
+        <div className=' h-[8vh] w-1/2 rounded-xl flex justify-between items-center border drop-shadow-xl z-10 px-[3.5vw]'>
           <span>
             <h1 className=' underline decoration-wavy decoration-orange-600 text-lg font-semibold'>
               Texty Bit
