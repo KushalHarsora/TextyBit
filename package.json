@@ -27,14 +27,13 @@
     "framer-motion": "^11.11.11",
     "glob": "^11.0.0",
     "jsonwebtoken": "^9.0.2",
-    "lucide-react": "^0.454.0",
+    "lucide-react": "^0.468.0",
     "mongoose": "^8.8.1",
-    "multer": "^1.4.5-lts.1",
-    "next": "15.0.2",
+    "next": "^15.1.2",
     "next-themes": "^0.4.3",
     "pdfjs-dist": "^3.4.120",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.5",
     "react-hook-form": "^7.53.2",
     "react-spring": "^9.7.4",
@@ -43,7 +42,7 @@
     "tailwind-merge": "^2.5.4",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
-    "three": "^0.170.0",
+    "three": "^0.171.0",
     "three-globe": "^2.34.4",
     "three-mesh-bvh": "^0.8.3",
     "zod": "^3.23.8"
@@ -56,9 +55,9 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^9.17.0",
-    "eslint-config-next": "15.0.2",
+    "eslint-config-next": "^15.1.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.7.2"
   }
 }
