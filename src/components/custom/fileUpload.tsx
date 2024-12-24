@@ -62,7 +62,7 @@ const FileUpload = () => {
 
             fullText += pageText + '\n';
           }
-
+          localStorage.setItem("textContent", fullText);
           resolve(fullText);
         } catch (error) {
           reject('Error extracting PDF text');

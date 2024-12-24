@@ -18,7 +18,6 @@ const ChatSection = () => {
   const [response, setResponse] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
 
-  // Retrieve the stored file and set it to state
   useEffect(() => {
     const savedFile = localStorage.getItem('uploadedFile');
     if (savedFile) {
@@ -38,30 +37,6 @@ const ChatSection = () => {
     }
   }, []);
 
-  // When the response changes, update count and show response animation
-  useEffect(() => {
-    const responseAnimation = () => {
-      const api_response = document.getElementById(`response-${count}`);
-      if (api_response?.innerText === "" && response === "") {
-        const dot1 = document.createElement("div");
-        dot1.className = " rounded-full w-3 h-3 bg-green-800";
-
-        const dot2 = document.createElement("div");
-        dot2.className = " rounded-full w-3 h-3 bg-green-600";
-
-        const dot3 = document.createElement("div");
-        dot3.className = " rounded-full w-3 h-3 bg-green-400";
-      } else if (api_response?.innerText !== "") {
-        setCount(prev => prev + 1);
-      }
-
-      if (response !== "") {
-        responseAnimation();
-      }
-    };
-  }, [response, count]);
-
-  // Handle text area key events
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.ctrlKey && event.key === 'Enter') {
       event.preventDefault();
@@ -71,27 +46,63 @@ const ChatSection = () => {
     }
   };
 
-  // Send query when user clicks "Send" button
   const handleSendButton = () => {
     handleQuerySubmit();
   };
 
-  // Handle submitting the query
   const handleQuerySubmit = async () => {
-    // Display the query
+
     const responseContainer = document.getElementById('response') as HTMLDivElement;
     const question = document.createElement("div");
     question.className = "relative left-[25%] h-fit w-[72%] bg-blue-200 text-black text-wrap border-0 text-balance my-2 rounded-lg font-medium p-3 whitespace-pre-line text-ellipsis break-words";
     question.innerText = query;
     responseContainer.appendChild(question);
 
-    // Handle the API response based on stored embeddings
+    const loading = document.createElement("div");
+    loading.className = " my-2 relative left-0 h-fit w-fit bg-green-200 text-black text-wrap border-0 text-balance rounded-lg font-medium p-3 whitespace-pre-line text-ellipsis break-words";
+    loading.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+    responseContainer.appendChild(loading);
+
+    // CSS (add this to your styles)
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin: 0 4px;
+        background-color: #000;
+        border-radius: 50%;
+        animation: bounce 1.4s infinite ease-in-out;
+      }
+
+      .dot:nth-child(1) {
+        animation-delay: -0.32s;
+      }
+
+      .dot:nth-child(2) {
+        animation-delay: -0.16s;
+      }
+
+      @keyframes bounce {
+        0%, 100% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1);
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
+
     const storedEmbeddings = JSON.parse(localStorage.getItem("embeddings") || '[]');
+    const textContent = localStorage.getItem("textContent");
     if (storedEmbeddings.length > 0) {
       const queryEmbedding = await generateQueryEmbedding(query);
       const similarities = storedEmbeddings.map((entry: any) => {
         const similarity = cosineSimilarity(queryEmbedding, entry.embeddings);
-        return { fileName: entry.fileName, similarity, embeddings: entry.embeddings };
+        return { fileName: entry.fileName, similarity, embeddings: entry.embeddings, content: entry.content };
       });
 
       // Sort by similarity (descending)
@@ -99,14 +110,20 @@ const ChatSection = () => {
 
       // Use the most similar document as context for generating the response
       const topDocument = similarities[0];
-      const context = `The most relevant document is from ${topDocument.fileName}. Here is its content: ...`; // Provide some context
-      const apiResponse = await generateApiResponse(context, query);
+      let context = `The most relevant document is from ${topDocument}. Here is its content: ...`;
 
-      // Display the API response
-      const apiResponseDiv = document.createElement("div");
-      apiResponseDiv.className = "my-4 relative left-0 h-fit w-[50%] bg-green-200 text-black text-wrap border-0 text-balance my-2 rounded-lg font-medium p-3 whitespace-pre-line text-ellipsis break-words";
-      apiResponseDiv.innerText = apiResponse;
-      responseContainer.appendChild(apiResponseDiv);
+      if (textContent) {
+        context += ` Additional content from storage: "${textContent}".`;
+      }
+
+      const apiResponse = await generateApiResponse(context, query);
+      if (apiResponse) {
+        responseContainer.removeChild(loading);
+        const apiResponseDiv = document.createElement("div");
+        apiResponseDiv.className = "my-4 relative left-0 h-fit w-[50%] bg-green-200 text-black text-wrap border-0 text-balance my-2 rounded-lg font-medium p-3 whitespace-pre-line text-ellipsis break-words";
+        apiResponseDiv.innerText = apiResponse;
+        responseContainer.appendChild(apiResponseDiv);
+      }
     } else {
       const noEmbeddingsResponse = "No embeddings found in storage.";
       const apiResponseDiv = document.createElement("div");
