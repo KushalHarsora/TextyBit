@@ -1,10 +1,12 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { SendHorizonal } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Cosine similarity function to compare query and embeddings
 const cosineSimilarity = (a: number[], b: number[]) => {
   const dotProduct = a.reduce((acc, val, idx) => acc + val * b[idx], 0);
   const magnitudeA = Math.sqrt(a.reduce((acc, val) => acc + val ** 2, 0));
@@ -14,8 +16,6 @@ const cosineSimilarity = (a: number[], b: number[]) => {
 
 const ChatSection = () => {
   const [query, setQuery] = useState<string>("");
-  const [count, setCount] = useState(0);
-  const [response, setResponse] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
@@ -34,8 +34,11 @@ const ChatSection = () => {
     } else {
       const textbox = document.getElementById("queryBox") as HTMLTextAreaElement;
       textbox.disabled = true;
+      if (file) {
+        textbox.disabled = false;
+      }
     }
-  }, []);
+  }, [file]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.ctrlKey && event.key === 'Enter') {
@@ -63,7 +66,6 @@ const ChatSection = () => {
     loading.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
     responseContainer.appendChild(loading);
 
-    // CSS (add this to your styles)
     const style = document.createElement("style");
     style.innerHTML = `
       .dot {
@@ -105,10 +107,8 @@ const ChatSection = () => {
         return { fileName: entry.fileName, similarity, embeddings: entry.embeddings, content: entry.content };
       });
 
-      // Sort by similarity (descending)
       similarities.sort((a: any, b: any) => b.similarity - a.similarity);
 
-      // Use the most similar document as context for generating the response
       const topDocument = similarities[0];
       let context = `The most relevant document is from ${topDocument}. Here is its content: ...`;
 
@@ -135,9 +135,7 @@ const ChatSection = () => {
     setQuery("");
   };
 
-  // Generate the embedding for the query (using the same model as you did for documents)
   const generateQueryEmbedding = async (query: string) => {
-    // Use the same method as you did for generating embeddings for the documents
     const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_KEY!);
     const model = genAI.getGenerativeModel({
       model: "text-embedding-004",
@@ -152,9 +150,7 @@ const ChatSection = () => {
     }
   };
 
-  // Function to generate response from the LLM (using the top document as context)
   const generateApiResponse = async (context: string, query: string) => {
-    // Assuming you have a function to query the Gemini model with context and query
     const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_KEY!);
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",

@@ -1,5 +1,8 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState, useEffect } from 'react';
 import { Inbox } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
