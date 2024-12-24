@@ -7,9 +7,10 @@ const nextConfig: NextConfig = {
     config.module.rules.push({
       test: /\.node$/,
       use: 'node-loader',
-      include: path.resolve(__dirname, 'node_modules/canvas'),
+      include: [path.resolve(__dirname, 'node_modules/canvas'), path.resolve(__dirname, 'node_modules/pdfjs-dist')]
     });
 
+    // Return the updated config
     return config;
   },
 };
