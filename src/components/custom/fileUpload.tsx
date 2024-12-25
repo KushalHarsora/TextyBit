@@ -138,6 +138,8 @@ const FileUpload = () => {
 
   const deleteFile = async () => {
     localStorage.removeItem("uploadedFile");
+    localStorage.removeItem("embeddings");
+    localStorage.removeItem("textContent");
     setFile(null);
     setPdfUrl(null);
     toast.error("File Deleted", {
