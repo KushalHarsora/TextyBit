@@ -34,7 +34,7 @@ const ChatSection = () => {
     } else {
       const textbox = document.getElementById("queryBox") as HTMLTextAreaElement;
       textbox.disabled = true;
-      if (file) {
+      if (localStorage.getItem("uploadedFile")) {
         textbox.disabled = false;
       }
     }
