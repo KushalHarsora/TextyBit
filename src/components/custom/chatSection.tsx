@@ -38,7 +38,7 @@ const ChatSection = () => {
         textbox.disabled = false;
       }
     }
-  }, [file]);
+  }, []);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.ctrlKey && event.key === 'Enter') {

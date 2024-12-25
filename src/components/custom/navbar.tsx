@@ -46,6 +46,19 @@ const Navbar = () => {
             },
             duration: 1500
           });
+
+          if(localStorage.getItem("textContent")) {
+            localStorage.removeItem("textContent");
+          }
+
+          if(localStorage.getItem("uploadedFile")) {
+            localStorage.removeItem("uploadedFile");
+          }
+
+          if(localStorage.getItem("embeddings")) {
+            localStorage.removeItem("embeddings");
+          }
+          
           router.push("/sign-in");
         })
         .catch((error: unknown) => {

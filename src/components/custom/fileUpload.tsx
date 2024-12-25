@@ -120,6 +120,7 @@ const FileUpload = () => {
             }
           };
           reader.readAsDataURL(newFile);
+          window.location.reload();
         } else {
           toast.error("Kindly select a PDF File only", {
             style: {
@@ -129,6 +130,7 @@ const FileUpload = () => {
             },
             duration: 2500
           });
+          window.location.reload();
         }
       }
     }
