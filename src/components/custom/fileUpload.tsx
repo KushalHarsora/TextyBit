@@ -84,7 +84,7 @@ const FileUpload = () => {
       const newFile = acceptedFiles[0];
       const reader = new FileReader();
 
-      if (newFile.size > 10 * 1024 * 1024) {
+      if (newFile.size > 5 * 1024 * 1024) {
         toast.error("Kindly select a small PDF File (max 10mb)", {
           style: {
             "backgroundColor": "#FADBD8",
@@ -105,9 +105,7 @@ const FileUpload = () => {
             const textContent = await extractTextFromPDF(newFile);
             const result = await model.embedContent(textContent);
 
-            if (result && result.embedding) {
-              console.log("Embeddings:", result.embedding.values);
-
+            if (result && result.embedding && result.embedding.values) {
               const embeddings = result.embedding.values;
               const storedEmbeddings = JSON.parse(localStorage.getItem("embeddings") || '[]');
               storedEmbeddings.push({ fileName: newFile.name, embeddings });
@@ -115,12 +113,12 @@ const FileUpload = () => {
 
               setFile(newFile);
               setPdfUrl(reader.result as string);
+              window.location.reload();
             } else {
               console.error("Failed to generate embeddings");
             }
           };
           reader.readAsDataURL(newFile);
-          window.location.reload();
         } else {
           toast.error("Kindly select a PDF File only", {
             style: {
